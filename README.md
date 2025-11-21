@@ -1,5 +1,5 @@
 
-````markdown
+
 # Multi-Model NLP: The Semantic Convergence & Discrepancy Matrix (SCDM)
 
 > **The SCDM Framework is a high-precision NLP auditing system designed to solve the "Black Box" reliability problem in Named Entity Recognition (NER).**
