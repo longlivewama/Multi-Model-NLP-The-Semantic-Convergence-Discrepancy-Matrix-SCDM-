@@ -1,12 +1,8 @@
-# Core NLP & Application Framework
-gradio>=4.0.0       # For the web interface (GUI)
-spacy>=3.7.0        # Main NLP engine
-
-# Data Manipulation & Logic (The SCDM Matrix)
-pandas>=2.0.0       # For creating the comparison DataFrames
-numpy>=1.24.0       # For numerical operations
-
-# Dataset & Visualization (For Notebook/Analysis)
-kagglehub           # To download the CoNLL-2003 dataset
-matplotlib          # For charts and visualization
-seaborn             # For statistical data visualization
+spacy>=3.7.0
+transformers>=4.30.0
+gliner>=0.1.5
+pymupdf>=1.23.0
+gradio>=4.0.0
+pandas>=2.0.0
+torch>=2.0.0
+numpy
