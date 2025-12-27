@@ -1,163 +1,206 @@
 
+# ![Project Logo](final_evo.png)
 
-# Multi-Model NLP: The Semantic Convergence & Discrepancy Matrix (SCDM)
+# SCDM Pro: Semantic Convergence & Discrepancy Matrix
+### Advanced Multi-Model Named Entity Recognition (NER) System
 
-> **The SCDM Framework is a high-precision NLP auditing system designed to solve the "Black Box" reliability problem in Named Entity Recognition (NER).**
->
-> **It replaces blind trust with rigorous verification by:**
-> * **Orchestrating** simultaneous inference across Stochastic & Deterministic architectures.
-> * **Applying** Set Theory to audit model consensus and divergence.
-> * **Triangulating** outputs to instantly distinguish between high-confidence entities, hallucinations, and deep semantic discoveries.
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![Spacy](https://img.shields.io/badge/Spacy-v3.8-green)
+![HuggingFace](https://img.shields.io/badge/Transformers-BERT-yellow)
+![GLiNER](https://img.shields.io/badge/GLiNER-Zero--Shot-red)
+![Gradio](https://img.shields.io/badge/Gradio-UI-orange)
 
----
-
-## Table of Contents
-
-1.  [Executive Summary](#executive-summary)
-    * Understanding the Tri-Model Inference Engine.
-2.  [System Architecture](#system-architecture)
-    * The three-layer engineering approach (Inference, Logic, Presentation).
-3.  [Mathematical Logic (The SCDM Algorithm)](#mathematical-logic-the-scdm-algorithm)
-    * How Set Theory governs the entity comparison.
-4.  [Dataset Reference](#dataset-reference)
-    * Benchmarks and data compatibility.
-5.  [Installation & Setup](#installation--setup)
-    * Step-by-step guide to get running.
-6.  [Usage Guide](#usage-guide)
-    * How to operate the GUI and interpret results.
-7.  [Project Structure](#project-structure)
-    * File organization.
-8.  [License](#license)
+**SCDM Pro** is a high-precision entity extraction framework designed to solve the common pitfalls of single-model NLP systems. By utilizing a **Semantic Convergence** approach, it aggregates predictions from **5 distinct AI architectures** to form a consensus, ensuring that data extraction is accurate, robust, and verifiable.
 
 ---
 
-## Executive Summary
+## Why SCDM Pro? (The Problem & Solution)
 
-In the domain of Natural Language Processing (NLP), relying on a single model for Named Entity Recognition often leads to hallucinations or semantic ambiguity. The **SCDM Framework** addresses this by implementing a **Tri-Model Inference Engine**.
+Standard NER models often fail when facing:
+1.  **Ambiguity:** Is "Jordan" a country or a person?
+2.  **New Terminology:** New tech stacks (e.g., "LangChain", "GPT-4") are often missed by older models.
+3.  **Complex Formats:** PDF text extraction often breaks names and sentences (e.g., "Ah- med").
 
-It processes input text simultaneously through three distinct pipelines:
-1.  **En_Core_Web_SM:** (Lightweight Stochastic Model) - optimized for speed and baseline detection.
-2.  **En_Core_Web_LG:** (High-Dimensional Vector Model) - utilizing deep context for semantic extraction.
-3.  **EntityRuler:** (Deterministic Rule-Based System) - enforcing precision constraints for domain-specific entities.
-
-The output is not merely a list of entities, but a **Semantic Matrix** that classifies each extracted token based on its intersection across these models, providing a granular audit of model reliability.
-
----
-
-## System Architecture
-
-The application is engineered using a modular Monolithic architecture, divided into three logical layers:
-
-### 1. The Inference Layer
-* **Global Initialization:** Pre-loads heavy Spacy pipelines (en_core_web_lg) into RAM to minimize latency during runtime requests.
-* **Pipeline Injection:** Dynamically injects the EntityRuler component into the processing stream to enforce custom pattern matching (e.g., "Cairo" as GPE, "OpenAI" as ORG).
-
-### 2. The Logic Layer (SCDM Core)
-* **Normalization:** Converts raw Spacy Doc objects into optimized Python Sets to eliminate redundancy.
-* **Set Operations:** Executes logical comparisons (Intersection, Difference) to determine entity status.
-* **Data Structuring:** Maps the logic results into a structured Pandas DataFrame for analytical presentation.
-
-### 3. The Presentation Layer
-* **Gradio Blocks API:** Utilizes a component-based UI approach for a responsive layout.
-* **State Management:** Implements input clearing and state reset functionality without requiring a server restart.
+**The Solution:** Instead of relying on one "brain," SCDM Pro uses a **Weighted Voting Mechanism** involving:
+* **Statistical Models:** Spacy Small & Large.
+* **Transformer Models:** BERT (Deep Context).
+* **Zero-Shot Models:** GLiNER (For new/unseen labels).
+* **Rule-Based Logic:** Regex and Patterns (For IDs and specific roles).
 
 ---
 
-## Mathematical Logic (The SCDM Algorithm)
+## Key Features
 
-The core differentiator of this framework is the **SCDM Algorithm**, which categorizes entities based on Set Theory.
+### 1. The Ensemble Engine
+The system runs the following models in parallel on the same text:
+* **Spacy SM & LG:** Fast, efficient syntactic analysis.
+* **BERT Transformer (dslim/bert-base-NER):** State-of-the-art context understanding for standard entities.
+* **GLiNER (urchade/gliner_medium-v2.1):** A Zero-Shot model capable of detecting arbitrary labels like `drug`, `symptom`, or `software` without specific training.
+* **EntityRuler:** A custom rule-engine that forces detection of specific patterns (IDs, Job Titles).
 
-Let:
-* S_sm be the set of entities detected by the Small Model.
-* S_lg be the set of entities detected by the Large Model.
-* S_rule be the set of entities enforced by Rules.
+### 2. Intelligent Voting & Consensus
+The system doesn't just list entities; it **votes** on them:
+* **Full Consensus:** All active models agree on the entity and label.
+* **Majority:** Most models agree, but there is some discrepancy.
+* **Disagreement:** Only one model found the entity (flagged for review).
 
-The framework calculates the following states:
-
-### 1. Semantic Consensus (High Confidence)
-Occurs when all models agree on an entity's existence.
-$$Convergence = S_{sm} \cap S_{lg} \cap S_{rule}$$
-
-### 2. Model Discrepancy (Sensitivity Analysis)
-Identifies entities found exclusively by the high-parameter model, indicating subtle semantic detection capabilities.
-$$D_{lg} = S_{lg} - (S_{sm} \cup S_{rule})$$
-
-### 3. Deterministic Enforcement
-Identifies entities that were missed by AI models but captured via hard-coded rules.
-$$E_{rules} = S_{rule} - (S_{sm} \cup S_{lg})$$
+### 3. Robust File Parsing
+* **PDF Support:** Uses `PyMuPDF` (fitz) to extract text from PDF documents.
+* **Text Cleaning:** Automatically fixes broken lines and whitespace issues common in PDF extraction before feeding data to the models.
 
 ---
 
-## Dataset Reference
+## Technical Architecture
 
-While the framework supports dynamic user input, the underlying models and evaluation logic are compatible with standard benchmarks such as the **CoNLL-2003** dataset.
+The pipeline processes data through the following stages:
 
-* **Standard Benchmark:** [CoNLL-2003 (English Version) on Kaggle](https://www.kaggle.com/datasets/alaakhaled/conll003-englishversion)
-* **Capabilities:** The system is designed to handle raw text inputs, news articles, and technical documentation.
+1.  **Input Layer:** Accepts Raw Text or PDF Files.
+2.  **Preprocessing:** Text normalization and cleaning.
+3.  **Model Inference Layer:**
+    * *Rules:* Regex for IDs (e.g., `REF-\d{4}`), Academic Titles (`Dr.`, `Prof.`).
+    * *Transformers:* Mapping BERT labels (`PER`, `LOC`) to Spacy standard (`PERSON`, `GPE`) for comparison.
+    * *Zero-Shot:* Prompting GLiNER for specific custom labels.
+4.  **Convergence Layer:**
+    * Aggregates all findings.
+    * Calculates **Confidence Score** based on model agreement.
+    * Deduplicates overlapping entities.
+5.  **Output Layer:** Renders the Gradio Interface and generates CSV reports.
 
 ---
 
 ## Installation & Setup
 
-### Prerequisites
-* **Python 3.8+**
-* **pip** (Package Installer for Python)
-
-### Step 1: Clone the Repository
+### 1. Clone the Repository
 ```bash
-git clone [https://github.com/your-username/SCDM-NLP-Framework.git](https://github.com/your-username/SCDM-NLP-Framework.git)
-cd SCDM-NLP-Framework
-````
+git clone [https://github.com/your-username/SCDM-Pro.git](https://github.com/your-username/SCDM-Pro.git)
+cd SCDM-Pro
 
-### Step 2: Install Dependencies
-
-```bash
-pip install gradio spacy pandas
 ```
 
-### Step 3: Download NLP Models
+### 2. Install Dependencies
 
-The system requires specific Spacy pipelines to function:
+```bash
+pip install -r requirements.txt
+
+```
+
+### 3. Download Spacy Models
+
+You must download the language models before running the app:
 
 ```bash
 python -m spacy download en_core_web_sm
 python -m spacy download en_core_web_lg
+python -m spacy download en_core_web_trf
+
 ```
 
------
+---
 
-## Usage Guide
+## Code Implementation
 
-1.  **Launch the Server:**
-    Execute the main script from your terminal:
-    ```bash
-    python app.py
-    ```
-2.  **Access the Interface:**
-    Open the provided local URL (e.g., https://www.google.com/search?q=http://127.0.0.1:7860) in your web browser.
-3.  **Perform Analysis:**
-      * **Input:** Paste text into the main buffer.
-      * **Execute:** Click the "Analyze & Compare" button.
-      * **Inspect:** Use the tabs to toggle between model visualizations.
-      * **Audit:** Open the "Detailed Comparison Table" to view the SCDM Matrix.
+### 1. Running the GUI
 
------
+To start the Gradio interface, simply run the main application script:
+
+```python
+# src/app.py
+import gradio as gr
+from logic import process_pipeline
+
+# Launch the interface
+if __name__ == "__main__":
+    demo.launch(share=True)
+
+```
+
+### 2. Using the Logic Programmatically
+
+You can use the core logic without the GUI to process text in your own scripts:
+
+```python
+from models import load_models
+from logic import run_voting_system
+
+# 1. Load Models (Simulated)
+nlp_trf, bert_pipe, gliner_model = load_models()
+
+# 2. Input Text
+text = "Dr. Ahmed accepted the offer from OpenAI in San Francisco."
+
+# 3. Run Voting Logic
+results = run_voting_system(text, nlp_trf, bert_pipe, gliner_model)
+
+# 4. View Results
+for entity in results:
+    print(f"Entity: {entity['text']} | Label: {entity['label']} | Confidence: {entity['score']}%")
+# Output:
+# Entity: Ahmed | Label: PERSON | Confidence: 100% (Consensus)
+# Entity: OpenAI | Label: ORG | Confidence: 100% (Consensus)
+
+```
+
+### 3. Adding Custom Rules (Regex)
+
+To detect custom patterns like Employee IDs or Invoice Numbers, you can modify the `EntityRuler` configuration in `models.py`:
+
+```python
+# Adding a regex pattern for Invoice Numbers (e.g., INV-2024)
+patterns = [
+    {"label": "INVOICE_ID", "pattern": [{"TEXT": {"REGEX": "^INV-\d{4}$"}}]},
+    {"label": "ROLE", "pattern": [{"LOWER": "senior"}, {"LOWER": "engineer"}]}
+]
+ruler.add_patterns(patterns)
+
+```
+
+---
 
 ## Project Structure
 
 ```text
-SCDM-NLP-Framework/
-├── app.py                 # Main application entry point (Logic + GUI)
-├── requirements.txt       # List of python dependencies
-├── README.md              # Project documentation
-├── .gitignore             # Git ignore rules
-└── assets/                # (Optional) Screenshots and diagrams
+SCDM-Pro/
+│
+├── data/                      # Directory for sample PDF/TXT files
+│   ├── sample_resume.pdf
+│   └── test_data.txt
+│
+├── output/                    # Directory where CSV results are saved
+│   └── ner_results.csv
+│
+├── src/                       # Source Code
+│   ├── __init__.py
+│   ├── app.py                 # Main entry point (Gradio Launcher)
+│   ├── models.py              # Model loading (BERT, GLiNER, Spacy)
+│   ├── logic.py               # Voting mechanism & Consensus logic
+│   └── utils.py               # File reading (PDF) & Text cleaning
+│
+├── .gitignore
+├── requirements.txt           # Python dependencies
+├── README.md                  # Project Documentation
+└── final_evo.png              # Project Architecture Diagram/Logo
+
 ```
 
------
+---
 
-**Developed by [ِAhmed fahim]**
-*Advanced Natural Language Processing Engineer*
+## License
 
-```
-```
+This project is open-source and available under the MIT License.
+
+
+## Test Case Example
+
+**Input Text:**
+
+> "Dr. Ahmed Fahim, the Senior Engineer at OpenAI, met with Mohamed Salah in Cairo. The employee ID is REF-9021."
+
+**Expected Result:**
+
+* **Ahmed Fahim:** Detected as `PERSON` (Consensus: High).
+* **OpenAI:** Detected as `ORG` (Consensus: High).
+* **Cairo:** Detected as `GPE` (Consensus: High).
+* **Senior Engineer:** Detected as `ROLE` (Captured by Rule-Based logic).
+* **REF-9021:** Detected as `ID_CODE` (Captured by Regex).
+
+---
